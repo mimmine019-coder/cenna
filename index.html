@@ -1,12 +1,75 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CENNA SHOP</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MENUVERSE - Premium & Free Menu Templates Shop</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #06090e; color: #f1f5f9; font-family: system-ui, sans-serif; }
+    .glass-nav { background: rgba(10, 13, 20, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .glass-card { background: rgba(18, 24, 36, 0.7); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s; }
+    .glass-card:hover { border-color: rgba(139, 92, 246, 0.4); transform: translateY(-4px); }
+  </style>
 </head>
 <body>
   <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
+  <script type="text/babel">
+    const { useState } = React;
+    const INITIAL_PRODUCTS = [
+      { id: '1', name: 'Cyberpunk Neon Diner', category: 'Neon', price: 0, isFree: true, image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&auto=format&fit=crop&q=80', desc: 'Thiết kế Menu phong cách tương lai, hiệu ứng Neon rực rỡ thích hợp cho Bar & Pub.' },
+      { id: '2', name: 'Luxury Gold Bistro', category: 'Luxury', price: 490000, isFree: false, image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=80', desc: 'Phong cách hoàng gia sang trọng dành cho Nhà hàng 5 sao.' },
+      { id: '3', name: 'Minimalist Coffee House', category: 'Cafe', price: 0, isFree: true, image: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=600&auto=format&fit=crop&q=80', desc: 'Tối giản, tinh tế cho quán Cà phê hiện đại.' },
+      { id: '4', name: 'Esports Gaming Lounge', category: 'Gaming', price: 290000, isFree: false, image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&auto=format&fit=crop&q=80', desc: 'Giao diện cực ngầu cho các Cyber Game, Quán Net.' }
+    ];
+
+    function App() {
+      const [view, setView] = useState('home');
+      const [cart, setCart] = useState([]);
+      
+      return (
+        <div class="min-h-screen flex flex-col justify-between">
+          <header class="glass-nav fixed top-0 left-0 right-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+              <div class="text-2xl font-black text-blue-500 cursor-pointer" onClick={() => setView('home')}>MENU<span class="text-white">VERSE</span></div>
+              <div class="flex gap-6 text-sm font-semibold">
+                <button onClick={() => setView('home')} class="hover:text-blue-400">Trang Chủ</button>
+                <button onClick={() => setView('free')} class="hover:text-blue-400">Menu Free</button>
+                <button onClick={() => setView('premium')} class="hover:text-purple-400">Menu Premium</button>
+                <button onClick={() => setView('cart')} class="p-2 bg-gray-900 border border-gray-800 rounded-full">Giỏ ({cart.length})</button>
+              </div>
+            </div>
+          </header>
+
+          <main class="pt-28 pb-16 px-4 max-w-7xl mx-auto w-full">
+            <section class="rounded-3xl p-12 mb-12 border border-gray-800 bg-gray-900/50">
+              <h1 class="text-5xl font-black mb-4">MENUVERSE SHOP</h1>
+              <p class="text-gray-400 text-lg mb-6">Cung cấp hàng trăm mẫu Menu chuyên nghiệp cho Nhà hàng, Cafe, Gaming & Spa.</p>
+            </section>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {INITIAL_PRODUCTS.filter(p => view === 'free' ? p.isFree : view === 'premium' ? !p.isFree : true).map(p => (
+                <div key={p.id} class="glass-card rounded-2xl overflow-hidden p-4">
+                  <img src={p.image} class="h-48 w-full object-cover rounded-xl mb-4" />
+                  <h3 class="font-bold text-lg mb-1">{p.name}</h3>
+                  <p class="text-gray-400 text-xs mb-4">{p.desc}</p>
+                  <div class="flex justify-between items-center border-t border-gray-800 pt-3">
+                    <span class="font-bold text-blue-400">{p.isFree ? 'FREE' : `${p.price.toLocaleString('vi-VN')} VNĐ`}</span>
+                    {!p.isFree && <button onClick={() => setCart([...cart, p])} class="px-4 py-2 bg-blue-600 font-bold text-xs rounded-xl">Thêm vào giỏ</button>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
 </body>
 </html>
